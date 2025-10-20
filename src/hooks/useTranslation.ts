@@ -89,7 +89,6 @@ export const useTranslation = (): UseTranslationReturn => {
               translation = await apiClient.translate(text, 'ru');
               await new Promise((resolve) => setTimeout(resolve, 100));
             } catch (error) {
-              console.error(`Failed to translate: ${text}`, error);
               apiErrors++;
 
               if (apiErrors > 5) {

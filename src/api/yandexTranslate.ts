@@ -72,8 +72,6 @@ export class YandexTranslateAPI {
 
       return data.translations.map((t) => t.text);
     } catch (error) {
-      console.error('Batch translation error:', error);
-
       throw error;
     }
   }
