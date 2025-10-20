@@ -1,4 +1,4 @@
-import { YandexTranslateResponse } from '../types';
+import { YandexTranslateResponse } from '../src/types';
 
 const TRANSLATE_PROXY_URL =
   process.env.NODE_ENV === 'production'
