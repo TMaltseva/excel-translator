@@ -144,9 +144,7 @@ export const ExcelTranslator = () => {
           <StatusBox type="error">{status.message}</StatusBox>
         )}
 
-        <Footer>
-          Форматы: .xlsx, .xls • Гибридный перевод: Словарь + AI
-        </Footer>
+        <Footer>Форматы: .xlsx, .xls • Гибридный перевод: Словарь + AI</Footer>
       </Card>
     </Container>
   );
