@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ChangeEvent } from 'react';
+import { useState, useEffect, ChangeEvent } from 'react';
 import styled from 'styled-components';
 import { useTranslation } from './hooks/useTranslation';
 

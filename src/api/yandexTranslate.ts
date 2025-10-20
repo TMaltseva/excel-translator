@@ -12,7 +12,7 @@ export class YandexTranslateAPI {
     this.apiKey = apiKey;
   }
 
-  async translate(text: string, targetLang: string = 'ru'): Promise<string> {
+  async translate(text: string, _targetLang: string = 'ru'): Promise<string> {
     try {
       const response = await fetch(TRANSLATE_PROXY_URL, {
         method: 'POST',
@@ -50,7 +50,7 @@ export class YandexTranslateAPI {
 
   async translateBatch(
     texts: string[],
-    targetLang: string = 'ru'
+    _targetLang: string = 'ru'
   ): Promise<string[]> {
     try {
       const response = await fetch(TRANSLATE_PROXY_URL, {
