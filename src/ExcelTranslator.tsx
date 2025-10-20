@@ -1,4 +1,4 @@
-import { useState, useEffect, ChangeEvent } from 'react';
+import React, { useState, useEffect, ChangeEvent } from 'react';
 import styled from 'styled-components';
 import { useTranslation } from './hooks/useTranslation';
 
@@ -24,6 +24,12 @@ export const ExcelTranslator = () => {
 
   const handleSaveKeyChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSaveKey(e.target.checked);
+  };
+
+  const handleClearKey = () => {
+    setApiKey('');
+    setSaveKey(false);
+    localStorage.removeItem(API_KEY_STORAGE_KEY);
   };
 
   const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -60,7 +66,7 @@ export const ExcelTranslator = () => {
         </Header>
 
         <ApiHelp>
-          <strong>📝 Как получить API ключ:</strong>
+          <strong>Как получить API ключ:</strong>
           <br />
           1. Зайдите на{' '}
           <a
@@ -78,13 +84,20 @@ export const ExcelTranslator = () => {
 
         <FormGroup>
           <Label htmlFor="apiKey">Yandex API ключ:</Label>
-          <Input
-            id="apiKey"
-            type="password"
-            value={apiKey}
-            onChange={handleApiKeyChange}
-            placeholder="Введите ваш API ключ"
-          />
+          <InputWrapper>
+            <Input
+              id="apiKey"
+              type="password"
+              value={apiKey}
+              onChange={handleApiKeyChange}
+              placeholder="Введите ваш API ключ"
+            />
+            {apiKey && (
+              <ClearButton onClick={handleClearKey} type="button">
+                ✕
+              </ClearButton>
+            )}
+          </InputWrapper>
           <CheckboxWrapper>
             <Checkbox
               id="saveKey"
@@ -131,7 +144,9 @@ export const ExcelTranslator = () => {
           <StatusBox type="error">{status.message}</StatusBox>
         )}
 
-        <Footer>Форматы: .xlsx, .xls • Гибридный перевод: Словарь + AI</Footer>
+        <Footer>
+          Форматы: .xlsx, .xls • Гибридный перевод: Словарь + AI
+        </Footer>
       </Card>
     </Container>
   );
@@ -211,9 +226,15 @@ const Label = styled.label`
   font-size: 14px;
 `;
 
+const InputWrapper = styled.div`
+  position: relative;
+  width: 100%;
+`;
+
 const Input = styled.input`
   width: 100%;
   padding: 12px 15px;
+  padding-right: 45px;
   border: 2px solid #e0e0e0;
   border-radius: 8px;
   font-size: 14px;
@@ -223,6 +244,30 @@ const Input = styled.input`
   &:focus {
     outline: none;
     border-color: #667eea;
+  }
+`;
+
+const ClearButton = styled.button`
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #e0e0e0;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: #666;
+  transition: background 0.3s;
+
+  &:hover {
+    background: #d0d0d0;
+    color: #333;
   }
 `;
 
