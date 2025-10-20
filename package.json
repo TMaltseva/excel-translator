@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "react-scripts build",
-    "dev": "react-scripts start",
+    "dev": "react-scripts start", 
     "start": "react-scripts start",
     "lint": "eslint --fix --ext .js,.jsx,.ts,.tsx . && npx prettier --write \"src/**/*.{js,jsx,ts,tsx}\""
   },
@@ -17,14 +17,12 @@
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@types/node": "^20.11.0",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
     "@types/styled-components": "^5.1.26",
     "@vercel/node": "^3.2.29",
     "babel-plugin-styled-components": "^2.1.4",
-    "customize-cra": "^1.0.0",
     "eslint": "^8.48.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-config-react-app": "^7.0.1",
@@ -32,7 +30,6 @@
     "eslint-plugin-react": "^7.32.0",
     "gh-pages": "^4.0.0",
     "prettier": "2.2.0",
-    "react-app-rewired": "^2.2.1",
     "typescript": "^4.9.5"
   },
   "browserslist": {
