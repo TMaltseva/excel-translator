@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { YandexTranslateAPI } from '../../api/yandexTranslate';
+import { YandexTranslateAPI } from '../api/yandexTranslate';
 import {
   applyDictionaryTranslation,
   needsTranslation,
