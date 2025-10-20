@@ -1,7 +1,6 @@
 {
   "name": "excel-translator",
   "version": "1.0.0",
-  "homepage": "https://tmaltseva.github.io/excel-translator",
   "private": true,
   "scripts": {
     "predeploy": "npm run build",
@@ -24,6 +23,7 @@
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
     "@types/styled-components": "^5.1.26",
+    "@vercel/node": "^3.2.29",
     "babel-plugin-styled-components": "^2.1.4",
     "customize-cra": "^1.0.0",
     "eslint": "^8.48.0",
