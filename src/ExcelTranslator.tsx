@@ -62,7 +62,7 @@ export const ExcelTranslator = () => {
         <Header>
           <Icon>🌐</Icon>
           <Title>Excel Переводчик</Title>
-          <Subtitle>Армянский и Английский → Русский</Subtitle>
+          <Subtitle>Переводит документы на русский язык</Subtitle>
         </Header>
 
         <ApiHelp>
@@ -156,7 +156,7 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   padding: 20px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
     Ubuntu, Cantarell, sans-serif;
 `;
