@@ -22,7 +22,7 @@ export const BANKING_TERMS: BankingTerm = {
 
 const TRANSLATION_PATTERNS: Array<[RegExp, string]> = [
   [
-    /Փոխկպ\.\s*հաշվից\s*վճ[\/\\]?Linked\s*Acc\.\s*Paym/gi,
+    /Փոխկպ\.\s*հաշվից\s*վճ[/\\]?Linked\s*Acc\.\s*Paym/gi,
     'Оплата со связанного счета'
   ],
   [/Փոխկպ\.\s*հաշվից\s*վճ/g, 'Оплата со связанного счета'],
@@ -30,9 +30,9 @@ const TRANSLATION_PATTERNS: Array<[RegExp, string]> = [
     /Հաճախորդի\s*սպասարկում\s*ռեզ\.իրավ\.անձ\s*,հաշվի\./g,
     'Обслуживание клиента рез. юр. лицо, счет'
   ],
-  [/Գանձում\s*փոխանցումից[\/\\]?Commission/gi, 'Комиссия за перевод'],
+  [/Գանձում\s*փոխանցումից[/\\]?Commission/gi, 'Комиссия за перевод'],
   [/Գանձում\s*փոխանցումից/g, 'Комиссия за перевод'],
-  [/Փոխանցում\s*քարտին[\/\\]?Transfer\s*To\s*Card/gi, 'Перевод на карту'],
+  [/Փոխանցում\s*քարտին[/\\]?Transfer\s*To\s*Card/gi, 'Перевод на карту'],
   [/Փոխանցում\s*քարտին/g, 'Перевод на карту'],
 
   [/INVOICE\s+NO\./gi, 'СЧЕТ-ФАКТУРА №'],
@@ -59,7 +59,7 @@ export const detectLanguage = (text: string): LanguageCode => {
     return 'ru';
   }
 
-  if (/^[a-zA-Z0-9\s.,!?;:()\-\/\\]+$/.test(text)) {
+  if (/^[a-zA-Z0-9\s.,!?;:()\-/\\]+$/.test(text)) {
     const englishKeywords = [
       'invoice',
       'date',

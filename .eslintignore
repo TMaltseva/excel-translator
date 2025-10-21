@@ -1,1 +1,11 @@
-build
+# Serverless functions (требуют default export)
+api/
+
+# Build files
+build/
+dist/
+node_modules/
+
+# Config files
+*.config.js
+*.config.ts
