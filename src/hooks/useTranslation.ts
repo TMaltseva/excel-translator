@@ -49,6 +49,7 @@ const validateApiKey = async (apiKey: string): Promise<boolean> => {
 
   try {
     await translateTexts(['test'], apiKey);
+
     return true;
   } catch {
     return false;
@@ -104,6 +105,7 @@ export const useTranslation = (): UseTranslationReturn => {
 
         if (textsToTranslate.length === 0) {
           updateStatus('success', 'Файл не содержит текстов для перевода');
+
           return;
         }
 
@@ -114,7 +116,6 @@ export const useTranslation = (): UseTranslationReturn => {
         );
 
         const translationCache = new Map<string, string>();
-        let translated = 0;
         let apiErrors = 0;
 
         const batchSize = 10;
@@ -129,7 +130,6 @@ export const useTranslation = (): UseTranslationReturn => {
               textsForApi.push(text);
             } else {
               translationCache.set(text, translation);
-              translated++;
             }
           }
 
@@ -137,10 +137,10 @@ export const useTranslation = (): UseTranslationReturn => {
             try {
               const apiResult = await translateTexts(textsForApi, apiKey);
 
-              textsForApi.forEach((text, index) => {
+              for (let index = 0; index < textsForApi.length; index++) {
+                const text = textsForApi[index];
                 translationCache.set(text, apiResult.translations[index].text);
-                translated++;
-              });
+              }
 
               await new Promise((resolve) => setTimeout(resolve, 100));
             } catch (error) {
@@ -152,10 +152,10 @@ export const useTranslation = (): UseTranslationReturn => {
                 );
               }
 
-              textsForApi.forEach((text) => {
+              for (let index = 0; index < textsForApi.length; index++) {
+                const text = textsForApi[index];
                 translationCache.set(text, text);
-                translated++;
-              });
+              }
             }
           }
 
