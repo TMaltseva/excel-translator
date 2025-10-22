@@ -31,18 +31,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const { texts, apiKey } = req.body;
 
   if (!texts || !apiKey) {
-    console.error('Missing required fields:', {
-      hasTexts: !!texts,
-      hasApiKey: !!apiKey
-    });
     res.status(400).json({ error: 'Missing texts or apiKey in request body' });
 
     return;
   }
 
   try {
-    console.log('Making request to Yandex API...');
-
     const response = await fetch(
       'https://translate.api.cloud.yandex.net/translate/v2/translate',
       {

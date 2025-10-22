@@ -1,5 +1,4 @@
 import { useState, useCallback } from 'react';
-import { YandexTranslateAPI } from '../api/yandexTranslate';
 import {
   applyDictionaryTranslation,
   needsTranslation,
@@ -21,6 +20,40 @@ interface UseTranslationReturn {
   translateFile: (file: File, apiKey: string) => Promise<void>;
   resetStatus: () => void;
 }
+
+const translateTexts = async (texts: string[], apiKey: string) => {
+  try {
+    const response = await fetch('/api/translate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ texts, apiKey })
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP Error: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    if (error instanceof TypeError) {
+      throw new Error('Network error - check internet connection');
+    }
+    throw error;
+  }
+};
+
+const validateApiKey = async (apiKey: string): Promise<boolean> => {
+  if (!apiKey || apiKey.trim().length < 10) {
+    return false;
+  }
+
+  try {
+    await translateTexts(['test'], apiKey);
+    return true;
+  } catch {
+    return false;
+  }
+};
 
 export const useTranslation = (): UseTranslationReturn => {
   const [status, setStatus] = useState<TranslationStatus>({
@@ -52,11 +85,9 @@ export const useTranslation = (): UseTranslationReturn => {
     async (file: File, apiKey: string) => {
       try {
         updateStatus('processing', 'Проверка API ключа...');
-        const apiClient = new YandexTranslateAPI(apiKey);
 
-        try {
-          await apiClient.translate('test', 'ru');
-        } catch (error) {
+        const isValidKey = await validateApiKey(apiKey);
+        if (!isValidKey) {
           throw new Error(
             'Неверный API ключ! Проверьте ключ в Yandex Cloud и попробуйте снова.'
           );
@@ -71,6 +102,11 @@ export const useTranslation = (): UseTranslationReturn => {
           needsTranslation
         );
 
+        if (textsToTranslate.length === 0) {
+          updateStatus('success', 'Файл не содержит текстов для перевода');
+          return;
+        }
+
         updateProgress(
           0,
           textsToTranslate.length,
@@ -81,34 +117,59 @@ export const useTranslation = (): UseTranslationReturn => {
         let translated = 0;
         let apiErrors = 0;
 
-        for (const text of textsToTranslate) {
-          let translation = applyDictionaryTranslation(text);
+        const batchSize = 10;
+        for (let i = 0; i < textsToTranslate.length; i += batchSize) {
+          const batch = textsToTranslate.slice(i, i + batchSize);
+          const textsForApi: string[] = [];
 
-          if (!wasTranslatedByDictionary(text, translation)) {
+          for (const text of batch) {
+            let translation = applyDictionaryTranslation(text);
+
+            if (!wasTranslatedByDictionary(text, translation)) {
+              textsForApi.push(text);
+            } else {
+              translationCache.set(text, translation);
+              translated++;
+            }
+          }
+
+          if (textsForApi.length > 0) {
             try {
-              translation = await apiClient.translate(text, 'ru');
+              const apiResult = await translateTexts(textsForApi, apiKey);
+
+              textsForApi.forEach((text, index) => {
+                translationCache.set(text, apiResult.translations[index].text);
+                translated++;
+              });
+
               await new Promise((resolve) => setTimeout(resolve, 100));
             } catch (error) {
               apiErrors++;
 
-              if (apiErrors > 5) {
+              if (apiErrors > 3) {
                 throw new Error(
                   'Слишком много ошибок API. Проверьте ваш API ключ или лимиты.'
                 );
               }
 
-              translation = text;
+              textsForApi.forEach((text) => {
+                translationCache.set(text, text);
+                translated++;
+              });
             }
           }
 
-          translationCache.set(text, translation);
-          translated++;
+          const processedCount = i + batchSize;
+          const current = Math.min(processedCount, textsToTranslate.length);
 
-          if (translated % 3 === 0 || translated === textsToTranslate.length) {
+          if (
+            processedCount >= textsToTranslate.length ||
+            processedCount % 20 === 0
+          ) {
             updateProgress(
-              translated,
+              current,
               textsToTranslate.length,
-              `Переведено ${translated} из ${textsToTranslate.length}`
+              `Обработано ${current} из ${textsToTranslate.length}`
             );
           }
         }
